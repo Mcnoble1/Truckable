@@ -52,10 +52,34 @@
 
 
 import React from 'react';
+import Map from "../components/Googlemaps";
+import Navbar from '../components/Navbar';
 
 const Dashboard = () => {
+  // Sample data for calculations
+  const units = [
+    { id: 1, milesDriven: 100, cost: 50, impression: 500 },
+    { id: 2, milesDriven: 150, cost: 75, impression: 700 },
+    // Add more units as needed
+  ];
+  const campaign = {
+    aadt: 1000,
+    secondsSpent: 600,
+    ratePerMile: 0.5,
+  };
+
+  // Calculate aggregate metrics
+  const totalImpressions = units.reduce((sum, unit) => sum + unit.impression, 0);
+  const aggregateCPM = (campaign.cost / totalImpressions) * 1000;
+  console.log(aggregateCPM);
+  const milesDriven = units.reduce((sum, unit) => sum + unit.milesDriven, 0);
+  const costOfCampaign = milesDriven * campaign.ratePerMile;
+  const ratePerMile = campaign.ratePerMile;
+
   return (
-    <div className="flex">
+    <div className='p-7'>
+        <Navbar/>
+        <div className="flex">
       {/* Sidebar */}
       <div className="w-1/4 p-4 bg-gray-200">
         <div className="mb-4">
@@ -64,24 +88,24 @@ const Dashboard = () => {
           <table className="w-full mb-4">
             <tbody>
               <tr>
-                <td className="py-2">Aggregate CPM:</td>
-                <td className="py-2">[CPM value]</td>
+                <td className="py-2">Aggregate CPM</td>
+                <td className="py-2">{aggregateCPM}</td>
               </tr>
               <tr>
-                <td className="py-2">Total Impressions:</td>
-                <td className="py-2">[Impressions value]</td>
+                <td className="py-2">Total Impressions</td>
+                <td className="py-2">{totalImpressions}</td>
               </tr>
               <tr>
-                <td className="py-2">Rate per Mile:</td>
-                <td className="py-2">[Rate per Mile value]</td>
+                <td className="py-2">Rate per Mile</td>
+                <td className="py-2">{ratePerMile}</td>
               </tr>
               <tr>
-                <td className="py-2">Miles Driven:</td>
-                <td className="py-2">[Miles Driven value]</td>
+                <td className="py-2">Miles Driven</td>
+                <td className="py-2">{milesDriven}</td>
               </tr>
               <tr>
-                <td className="py-2">Cost of the Campaign:</td>
-                <td className="py-2">[Campaign cost value]</td>
+                <td className="py-2">Cost of the Campaign</td>
+                <td className="py-2">{costOfCampaign}</td>
               </tr>
             </tbody>
           </table>
@@ -102,14 +126,15 @@ const Dashboard = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className="py-2">[Unit value]</td>
-                <td className="py-2">[Miles Driven value]</td>
-                <td className="py-2">[Cost value]</td>
-                <td className="py-2">[Impression value]</td>
-                <td className="py-2">[CPM value]</td>
-              </tr>
-              {/* More rows */}
+              {units.map((unit) => (
+                <tr key={unit.id}>
+                  <td className="py-2">{unit.id}</td>
+                  <td className="py-2">{unit.milesDriven}</td>
+                  <td className="py-2">{unit.cost}</td>
+                  <td className="py-2">{unit.impression}</td>
+                  <td className="py-2">{(unit.cost / unit.impression * 1000).toFixed(2)}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -117,8 +142,11 @@ const Dashboard = () => {
       {/* Map area */}
       <div className="w-3/4 bg-gray-500">
         {/* Map component */}
+        <Map/>
       </div>
     </div>
+    </div>
+   
   );
 };
 
