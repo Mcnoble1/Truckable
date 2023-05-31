@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 const Map = () => {
   const [googleMapsApiKey, setGoogleMapsApiKey] = useState('');
-
+    const lat = 44.500000;
+    const lng = -89.500000;
   useEffect(() => {
     const fetchGoogleMapsApiKey = async () => {
       try {
@@ -21,7 +22,7 @@ const Map = () => {
     if (googleMapsApiKey) {
       const initMap = () => {
         const map = new window.google.maps.Map(document.getElementById('map'), {
-          center: {  lat: 7.520767, lng: 4.530315 },
+          center: {  lat: lat, lng: lng },
           zoom: 12,
         });
 
