@@ -33,42 +33,42 @@ const Dashboard = () => {
     <div className='p-7 bg-[#F7F7F7] h-screen'>
         <Navbar/>
         <div className="flex p-6 bg-[#FFFFFF] rounded">
-        <div className="w-2/5 bg-[#FFFFFF]">
+        <div className="w-1/3 bg-[#FFFFFF]">
         <div className="mb-4">
           {/* Campaign Metrics */}
-          <h2 className="text-lg font-bold mb-2">Campaign Metrics</h2>
-          <table className="w-[95%] mb-4">
+          <h2 className="text-lg font-bold mb-6">Campaign Metrics</h2>
+          <table className="w-[95%] mb-4 text-[14px]">
             <tbody>
-              <tr>
-                <td className="py-2 border-b border-b">Aggregate CPM </td>
-                <td className="py-2 border-b absolute left-100">{aggregateCPM}</td>
+              <tr className=''>
+                <td className="py-2 border-b text-[#797979] border-[#E3E3E3]">Aggregate CPM </td>
+                <td className="py-2 border-b text-[#000000] font-semibold absolute left-100">{aggregateCPM}</td>
               </tr>
-              <tr>
-                <td className="py-2 border-b ">Total Impressions</td>
-                <td className="py-2 border-b absolute left-100">{totalImpressions}</td>
+              <tr className=''>
+                <td className="py-2 border-b text-[#797979]">Total Impressions</td>
+                <td className="py-2 border-b text-[#000000] font-semibold absolute left-100">{totalImpressions}</td>
               </tr>
-              <tr>
-                <td className="py-2 border-b ">Rate per Mile</td>
-                <td className="py-2 border-b absolute left-100">{ratePerMile}</td>
+              <tr className=''>
+                <td className="py-2 border-b text-[#797979]">Rate per Mile</td>
+                <td className="py-2 text-[#000000] font-semibold border-b absolute left-100">{ratePerMile}</td>
               </tr>
-              <tr>
-                <td className="py-2 border-b ">Miles Driven</td>
-                <td className="py-2 border-b absolute left-100">{milesDriven}</td>
+              <tr className=''>
+                <td className="py-2 border-b text-[#797979]">Miles Driven</td>
+                <td className="py-2 border-b text-[#000000] font-semibold absolute left-100">{milesDriven}</td>
               </tr>
-              <tr>
-                <td className="py-2">Cost of the Campaign</td>
-                <td className="py-2">{costOfCampaign}</td>
+              <tr className=''>
+                <td className="py-2 text-[#797979]">Cost of the Campaign</td>
+                <td className="py-2 text-[#000000] font-semibold">{costOfCampaign}</td>
               </tr>
             </tbody>
           </table>
         </div>
 
         {/* Units */}
-        <div className="mb-4">
-          <h2 className="text-lg font-bold mb-2">Units</h2>
+        <div>
+          <h2 className="text-lg font-bold mb-6">Units</h2>
           <table className="w-[90%] mb-4">
             <thead>
-              <tr className='bg-[#F0F0F0]'>
+              <tr className='bg-[#F0F0F0] text-[14px] text-[#797979]'>
                 <th className="py-2 ">Unit</th>
                 <th className="py-2 ">Miles Driven</th>
                 <th className="py-2 ">Cost</th>
@@ -92,7 +92,7 @@ const Dashboard = () => {
       </div>
 
       {/* Map area */}
-      <div className="w-3/5 bg-gray-500">
+      <div className="w-2/3 bg-[#FFFFFF]">
         {/* Map component */}
         <Map/>
       </div>
