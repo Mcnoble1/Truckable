@@ -24,6 +24,7 @@ const Map = () => {
         const map = new window.google.maps.Map(document.getElementById('map'), {
           center: {  lat: lat, lng: lng },
           zoom: 12,
+          mapId: 'fbb91aa492f165ea',
         });
 
         // Create any additional map markers, polylines, etc.
@@ -42,7 +43,7 @@ const Map = () => {
     }
   }, [googleMapsApiKey]);
 
-  return <div id="map" style={{ width: '100%', height: '100%' }} className='rounded'></div>;
+  return <div id="map" style={{ width: '100%', height: '100vh' }} className='rounded'></div>;
 };
 
 export default Map;

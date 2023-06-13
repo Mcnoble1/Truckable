@@ -30,7 +30,7 @@ const Dashboard = () => {
   const ratePerMile = campaign.ratePerMile;
 
   return (
-    <div className='p-7 bg-[#F7F7F7] h-screen'>
+    <div className='p-7 bg-[#F7F7F7] h-fit'>
         <Navbar/>
         <div className="flex p-6 bg-[#FFFFFF] rounded">
         <div className="w-1/3 bg-[#FFFFFF]">
