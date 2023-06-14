@@ -1,10 +1,14 @@
 
 import React from 'react';
+import { useState } from 'react';
 import Map from "../components/Googlemaps";
 import Navbar from '../components/Navbar';
 
 const Dashboard = () => {
   // Sample data for calculations
+
+  const [token, setToken] = useState(null);
+
   const units = [
     { id: 1, milesDriven: 100, cost: 50, impression: 500 },
     { id: 2, milesDriven: 150, cost: 75, impression: 700 },
@@ -19,16 +23,30 @@ const Dashboard = () => {
     aadt: 1000,
     secondsSpent: 600,
     ratePerMile: 0.5,
+    cost: 1000,
   };
 
   // Calculate aggregate metrics
   const totalImpressions = units.reduce((sum, unit) => sum + unit.impression, 0);
-  const aggregateCPM = (campaign.cost / totalImpressions) * 1000;
-  console.log(aggregateCPM);
+  const aggregateCPM = ((campaign.cost / totalImpressions) * 1000).toFixed(2);
+  // console.log(aggregateCPM);
   const milesDriven = units.reduce((sum, unit) => sum + unit.milesDriven, 0);
   const costOfCampaign = milesDriven * campaign.ratePerMile;
   const ratePerMile = campaign.ratePerMile;
 
+  const options = {
+    method: 'POST',
+    headers: {accept: '*/*', 'content-type': 'application/json'},
+    body: JSON.stringify({password: 'changeme', userName: 'truckable'})
+  };
+  
+  fetch('https://api.truckercloud.com/api/v4/authenticate', options)
+    .then(response => response.json())
+    .then(response => 
+      setToken(response.authToken))
+    .catch(err => console.error(err));
+
+  console.log(token);
   return (
     <div className='p-7 bg-[#F7F7F7] h-fit'>
         <Navbar/>
