@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { useState } from 'react';
+import axios from 'axios';
 import Map from "../components/Googlemaps";
 import Navbar from '../components/Navbar';
 
@@ -12,10 +13,9 @@ const Dashboard = () => {
   const units = [
     { id: 1, milesDriven: 100, cost: 50, impression: 500 },
     { id: 2, milesDriven: 150, cost: 75, impression: 700 },
-    { id: 1, milesDriven: 100, cost: 50, impression: 500 },
-    { id: 2, milesDriven: 150, cost: 75, impression: 700 },
-    { id: 1, milesDriven: 100, cost: 50, impression: 500 },
-    { id: 2, milesDriven: 150, cost: 75, impression: 700 },
+    { id: 1, milesDriven: 170, cost: 50, impression: 550 },
+    { id: 2, milesDriven: 154, cost: 75, impression: 720 },
+    { id: 2, milesDriven: 140, cost: 75, impression: 780 },
     
     // Add more units as needed
   ];
@@ -34,19 +34,44 @@ const Dashboard = () => {
   const costOfCampaign = milesDriven * campaign.ratePerMile;
   const ratePerMile = campaign.ratePerMile;
 
-  const options = {
-    method: 'POST',
-    headers: {accept: '*/*', 'content-type': 'application/json'},
-    body: JSON.stringify({password: 'changeme', userName: 'truckable'})
-  };
   
-  fetch('https://api.truckercloud.com/api/v4/authenticate', options)
-    .then(response => response.json())
-    .then(response => 
-      setToken(response.authToken))
-    .catch(err => console.error(err));
+const authenticateOptions = {
+  mode: 'no-cors',
+  method: 'POST',
+  url: 'https://api.truckercloud.com/api/v4/authenticate',
+  headers: { accept: '*/*', 'content-type': 'application/json' },
+  data: {password: 'changeme', userName: 'truckable'},
+};
 
-  console.log(token);
+const carriersOptions = {
+  mode: 'no-cors',
+  method: 'GET',
+  url: 'https://api.truckercloud.com/api/v4/carriers',
+  headers: { accept: 'application/json', Authorization: '' }, // Update the authToken here
+};
+
+const fetchData = async () => {
+  try {
+    // Authenticate request
+    const authResponse = await axios.request(authenticateOptions);
+    const authToken = authResponse.data.token;
+    console.log('Authentication Response:', authResponse.data);
+
+    // Update carriersOptions with authToken
+    carriersOptions.headers.Authorization = authToken;
+
+    // Carriers request
+    const carriersResponse = await axios.request(carriersOptions);
+    console.log('Carriers Response:', carriersResponse.data);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+fetchData();
+
+
+
   return (
     <div className='p-7 bg-[#F7F7F7] h-fit'>
         <Navbar/>
@@ -106,6 +131,18 @@ const Dashboard = () => {
               ))}
             </tbody>
           </table>
+
+          {/* <button onClick={getCarriers} >
+            Get Carriers
+          </button>
+
+          <button onClick={getVehicles} >
+            Get Vehicles
+          </button>
+
+          <button onClick={getDrivers} >
+            Get Drivers
+          </button> */}
         </div>
       </div>
 
