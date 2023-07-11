@@ -1,14 +1,20 @@
 
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Map from "../components/Googlemaps";
 import Navbar from '../components/Navbar';
+import CarriersPage from '../components/CarriersPage';
 
 const Dashboard = () => {
   // Sample data for calculations
 
-  const [token, setToken] = useState(null);
+  const [locationData, setLocationData] = useState(null);
+  const [carriers, setCarriers] = useState([]);
+  const [fromDate, setFromDate] = useState('2023-05-01 00:00:00');
+  const [toDate, setToDate] = useState('2023-05-10 00:00:00');
+
+
 
   const units = [
     { id: 1, milesDriven: 100, cost: 50, impression: 500 },
@@ -35,41 +41,63 @@ const Dashboard = () => {
   const ratePerMile = campaign.ratePerMile;
 
   
-const authenticateOptions = {
-  mode: 'no-cors',
-  method: 'POST',
-  url: 'https://api.truckercloud.com/api/v4/authenticate',
-  headers: { accept: '*/*', 'content-type': 'application/json' },
-  data: {password: 'changeme', userName: 'truckable'},
-};
+  // const handleAuthentication = async () => {
+  //   try {
+  //     const res = await fetch('/api/authenticate', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ password: 'your-password', userName: 'your-username' }),
+  //     });
 
-const carriersOptions = {
-  mode: 'no-cors',
-  method: 'GET',
-  url: 'https://api.truckercloud.com/api/v4/carriers',
-  headers: { accept: 'application/json', Authorization: '' }, // Update the authToken here
-};
+  //     const data = await res.json();
+  //     setResponse(data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+  
+  const handleCarriers = async () => {
+    try {
+      const res = await fetch('/api/carriers', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
 
-const fetchData = async () => {
-  try {
-    // Authenticate request
-    const authResponse = await axios.request(authenticateOptions);
-    const authToken = authResponse.data.token;
-    console.log('Authentication Response:', authResponse.data);
+      const data = await res.json();
+      let carriersList = data.content;
+      setCarriers(carriersList);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-    // Update carriersOptions with authToken
-    carriersOptions.headers.Authorization = authToken;
+  const handleHistoricLocations = async () => {
+    try {
+      const res = await fetch(`/api/historicalLocation?fromDate=${fromDate}&toDate=${toDate}`, {
+        method: 'GET',
+        headers: { 'content-type': 'application/json' },
+    });
 
-    // Carriers request
-    const carriersResponse = await axios.request(carriersOptions);
-    console.log('Carriers Response:', carriersResponse.data);
-  } catch (error) {
-    console.error(error);
-  }
-};
+      const data = await res.json();
+      let locationList = data.subscriptionTripInfo;
+      console.log(data);
+      console.log(locationList);
+      setLocationData(locationList);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
 
-fetchData();
 
+  // useEffect(() => {
+  //   handleCarriers();
+  // }, []);
+
+
+
+ 
+ 
 
 
   return (
@@ -132,20 +160,37 @@ fetchData();
             </tbody>
           </table>
 
-          {/* <button onClick={getCarriers} >
-            Get Carriers
-          </button>
+          <div>
+            <button onClick={handleCarriers}>Get Carriers</button>
+            {carriers && carriers.length > 0 && (
+              <div>
+              <h1>Carriers</h1>
+              {carriers.map((carrier) => (
+                <div key={carrier.carrierInfo.carrierId}>
+                  <h2>{carrier.carrierInfo.carrierName}</h2>
+                </div>
+              ))}
+            </div>
+            )}
+          </div>
 
-          <button onClick={getVehicles} >
-            Get Vehicles
-          </button>
+          <div>
+            <button onClick={handleHistoricLocations}>Get Historic Locations</button>
+            {locationData && locationData.length > 0 && (
+              <div>
+              <h1>Historic Locations</h1>
+              {locationData.map((location) => (
+                <div key={location.subscriptionId}>
+                  <h2>{location.historicalLocationInfo.lattitude}</h2>
+                  <h2>{location.historicalLocationInfo.longitude}</h2>
+                </div>
+              ))}
+          </div>
+            )}
+          </div>
 
-          <button onClick={getDrivers} >
-            Get Drivers
-          </button> */}
         </div>
       </div>
-
       {/* Map area */}
       <div className="w-2/3 bg-[#FFFFFF]">
         {/* Map component */}
